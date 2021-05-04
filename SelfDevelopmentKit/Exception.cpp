@@ -24,11 +24,14 @@ void Exception::InitLog(char* sfLog) {
 	AddItem(pDate);
 	AddItem("======================");
 }
+void Exception::CloseLog() {
+	fclose(fLog);
+}
 void Exception::AddItem(const char* MsgStr) {
 	fprintf(fLog, MsgStr);
 	fflush(fLog);
 }
-Exception::Exception(int Level, char* Description) {
+Exception::Exception(ErrorCode Level, char* Description) {
 	char LevelString[256] = "";
 	switch (Level) {
 	case INFO_EXCEPTION:
@@ -47,9 +50,4 @@ Exception::Exception(int Level, char* Description) {
 	char* sMsg = new char[strlen(LevelString) + strlen(Description)];
 	sprintf(sMsg, "%s%s\n", LevelString, Description);
 	AddItem(sMsg);
-
-	//异常处理操作
-	if (Level == PANIC_EXCEPTION) {
-		throw;
-	}
 }
