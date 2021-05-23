@@ -16,13 +16,14 @@ char* Exception::MakeDateString() {
 	strftime(szBuffer, MAX_PATH, "=%x %X\n", &tmTime);
 	return szBuffer;
 }
-void Exception::InitLog(char* sfLog) {
+void Exception::InitLog(const char* sfLog) {
 	fLog = fopen(sfLog, "a+");
 	assert(fLog != nullptr);
 	char* pDate = MakeDateString();
-	AddItem("======================");
+	AddItem("======================\n");
 	AddItem(pDate);
-	AddItem("======================");
+	AddItem("======================\n");
+	delete pDate;
 }
 void Exception::CloseLog() {
 	fclose(fLog);
@@ -31,7 +32,7 @@ void Exception::AddItem(const char* MsgStr) {
 	fprintf(fLog, MsgStr);
 	fflush(fLog);
 }
-Exception::Exception(ErrorCode Level, char* Description) {
+void Exception::ThrowException(ErrorCode Level,const char* Description) {
 	char LevelString[256] = "";
 	switch (Level) {
 	case INFO_EXCEPTION:

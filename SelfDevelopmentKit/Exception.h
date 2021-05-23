@@ -25,17 +25,27 @@ enum ErrorCode {
 	PANIC_EXCEPTION=3, 
 };
 
-	static void InitLog(char* sfLog);
+	/*Initalize the log file*/
+	static void InitLog(const char* sfLog);
+	/*End up the Log*/
 	static void CloseLog();
 
-	Exception(ErrorCode Level, char* Description);
+	/*throw a exception message*/
+	static void ThrowException(ErrorCode Level,const char* Description);
 };
 
 /*定义一些异常抛出宏*/
-#define OCC_INFO(sM) {Exception(INFO_EXCEPTION,sM);}
-#define OCC_WARNING(sM) {Exception(WARNING_EXCEPTION,sM);}
-#define OCC_ERROR(sM) {Exception(ERROR_EXCEPTION,sM);return FALSE;}
-#define OCC_PANIC(sM) {Exception(PANIC_EXCEPTION,sM);ExitProcess(-65535);}
+
+/*输出一个消息*/
+#define OCC_INFO(sM) {Exception::ThrowException(Exception::ErrorCode::INFO_EXCEPTION,sM);}
+/*输出一个警告*/
+#define OCC_WARNING(sM) {Exception::ThrowException(Exception::ErrorCode::WARNING_EXCEPTION,sM);}
+/*输出一个错误*/
+#define OCC_ERROR(sM) {Exception::ThrowException(Exception::ErrorCode::ERROR_EXCEPTION,sM);return false;}
+/*输出一个异常*/
+#define OCC_PANIC(sM) {Exception::ThrowException(Exception::ErrorCode::PANIC_EXCEPTION,sM);ExitProcess(-65535);}
 //常用宏
+/*检查是不是空指针*/
 #define NULLPT(p) {if(!p){OCC_ERROR("null pointer.")}}
+/*检查是不是内存分配失败*/
 #define ALLOC(p) {if(!p){OCC_PANIC("alloc error.")}}
